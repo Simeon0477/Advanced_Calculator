@@ -9,7 +9,6 @@ using namespace std;
 void operation(char *operation);
 int calcul_operation(string operation[50]);
 int search(int pos, char sens);
-double stringToDouble(const std::string& str);
 int longueur(const char *chaine);
 int convert(const char *nombre);
 
@@ -127,10 +126,10 @@ int convert(const char *nombre){
     int lenght = longueur(nombre);
     int result = 0;
 
-    for(int i = lenght; i > 0; i--){
-        result += (*ptr - '0') * pow(10, i-1);
-        cout << result << endl;
+    while(*ptr != '\0'){
+        result = result + ((*ptr - '0') * pow(10, lenght-1));
         ptr++;
+        lenght--;
     }
 
     return result;
