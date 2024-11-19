@@ -2,6 +2,7 @@
 #include <string>
 #include <cstring>
 #include <cstdlib>
+#include <cmath>
 
 using namespace std;
 
@@ -9,6 +10,8 @@ void operation(char *operation);
 int calcul_operation(string operation[50]);
 int search(int pos, char sens);
 double stringToDouble(const std::string& str);
+int longueur(const char *chaine);
+int convert(const char *nombre);
 
 string chaine;
 string calcul[50];
@@ -56,34 +59,34 @@ int calcul_operation(string operation[50]){
     int i=0;
 
     for(i = 0; i < 50; i++){
-        if(calcul[i] == "_" || calcul[i] == ""){
+        if(operation[i] == "_" || operation[i] == ""){
             continue;
-        }else if(calcul[i] == "*"){
-            result = atoi(calcul[search(i, 'd')].c_str()) * atoi(calcul[search(i, 'a')].c_str());
-            calcul[search(i, 'd')] = to_string(result);
-            calcul[i] = "_";
-            calcul[search(i, 'a')] = "_";
-        }else if(calcul[i] == "/"){
-            if(atoi(calcul[search(i, 'a')].c_str()) == 0){
+        }else if(operation[i] == "*"){
+            result = convert(operation[search(i, 'd')].c_str()) * convert(operation[search(i, 'a')].c_str());
+            operation[search(i, 'd')] = to_string(result);
+            operation[i] = "_";
+            operation[search(i, 'a')] = "_";
+        }else if(operation[i] == "/"){
+            if(convert(operation[search(i, 'a')].c_str()) == 0){
                 cout << "Math error" << endl;
             }else{
-                result = atoi(calcul[search(i, 'd')].c_str()) / atoi(calcul[search(i, 'a')].c_str());
-                calcul[search(i, 'd')] = to_string(result);
-                calcul[i] = "_";
-                calcul[search(i, 'a')] = "_";
+                result = convert(operation[search(i, 'd')].c_str()) / convert(operation[search(i, 'a')].c_str());
+                operation[search(i, 'd')] = to_string(result);
+                operation[i] = "_";
+                operation[search(i, 'a')] = "_";
             }
         }
-        else if(calcul[i] == "+"){
-            result = atoi(calcul[search(i, 'd')].c_str()) + atoi(calcul[search(i, 'a')].c_str());
-            calcul[search(i, 'd')] = to_string(result);
-            calcul[i] = "_";
-            calcul[search(i, 'a')] = "_";
+        else if(operation[i] == "+"){
+            result = convert(operation[search(i, 'd')].c_str()) + convert(operation[search(i, 'a')].c_str());
+            operation[search(i, 'd')] = to_string(result);
+            operation[i] = "_";
+            operation[search(i, 'a')] = "_";
         }
-        else if(calcul[i] == "-"){
-            result = atoi(calcul[search(i, 'd')].c_str()) - atoi(calcul[search(i, 'a')].c_str());
-            calcul[search(i, 'd')] = to_string(result);
-            calcul[i] = "_";
-            calcul[search(i, 'a')] = "_";
+        else if(operation[i] == "-"){
+            result = convert(operation[search(i, 'd')].c_str()) - convert(operation[search(i, 'a')].c_str());
+            operation[search(i, 'd')] = to_string(result);
+            operation[i] = "_";
+            operation[search(i, 'a')] = "_";
         }
 
     }
@@ -119,56 +122,28 @@ int search(int pos, char sens){
     return 0;
 }
 
-double stringToDouble(const std::string& str) {
-    double result = 0.0;
-    bool negative = false;
-    bool decimalFound = false;
-    double decimalFactor = 1.0;
+int convert(const char *nombre){
+    const char *ptr = nombre;
+    int lenght = longueur(nombre);
+    int result = 0;
 
-    size_t i = 0;
-
-    // Gérer le signe
-    if (str[i] == '-') {
-        negative = true;
-        i++;
-    } else if (str[i] == '+') {
-        i++;
-    }
-
-    // Parcourir la chaîne
-    while (i < str.size()) {
-        char current = str[i];
-
-        // Gérer les chiffres
-        if (current >= '0' && current <= '9') {
-            result = result * 10.0 + (current - '0');
-            if (decimalFound) {
-                decimalFactor *= 10.0; // Ajuster le facteur décimal
-            }
-        }
-        // Gérer le point décimal
-        else if (current == '.') {
-            if (decimalFound) {
-                break; // Si un point a déjà été trouvé, sortir
-            }
-            decimalFound = true;
-        }
-        // Si un caractère non numérique est trouvé, sortir
-        else {
-            break;
-        }
-        i++;
-    }
-
-    // Ajuster le résultat pour la partie décimale
-    if (decimalFound) {
-        result /= decimalFactor;
-    }
-
-    // Appliquer le signe
-    if (negative) {
-        result = -result;
+    for(int i = lenght; i > 0; i--){
+        result += (*ptr - '0') * pow(10, i-1);
+        cout << result << endl;
+        ptr++;
     }
 
     return result;
+}
+
+int longueur(const char *chaine){
+    int lenght = 0;
+    const char *ptr = chaine;
+
+    while(*ptr != '\0'){
+        lenght++;
+        ptr++;
+    }
+
+    return lenght;
 }
